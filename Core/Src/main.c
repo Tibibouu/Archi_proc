@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "myApp.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,27 +95,18 @@ int main(void)
   /* Initialize all configured peripherals */
   //MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  BSP_LCD_Init();
-  BSP_LCD_Clear(LCD_COLOR_BLACK);
-  BSP_LCD_SetFont(&Font24);
-  BSP_LCD_SetTextColor(LCD_COLOR_RED);
-  BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
-  BSP_LCD_DisplayOn();
-  BSP_LCD_DisplayStringAtLine(1, (uint8_t *) "Hello World");
-  BSP_LCD_DisplayStringAtLine(2, (uint8_t *) "ZEBI");
+  myHelloWorld();
   /* USER CODE END 2 */
-
+  mySort();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
-
-  while (1)
-  {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+//  while (1)
+//  {
+//    /* USER CODE END WHILE */
+//
+//    /* USER CODE BEGIN 3 */
+//  }
+//  /* USER CODE END 3 */
 }
 
 /**
