@@ -42,10 +42,14 @@ void mySort()
 	tickStart = HAL_GetTick();
 
 	qsort(&myArray, ARRAY_SIZE, sizeof(uint32_t), cmpfunc);
+	//Time with double cache : 19ms
+	//Time with instruction cache : 34ms
+	//Time with data cache : 76ms
+	//Time without cache : 77ms
 
 	tickStop = HAL_GetTick();
 	executionTime = tickStop - tickStart;
 
-	snprintf(executionTimeString, 10000, "tps : %d ms", executionTime);
+	snprintf(executionTimeString, 10000, "tps : %ld ms", executionTime);
 	BSP_LCD_DisplayStringAtLine(3, (uint8_t *) executionTimeString);
 }
