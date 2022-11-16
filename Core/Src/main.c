@@ -71,11 +71,11 @@ int main(void)
   MPU_Config();
 
   /* Enable I-Cache---------------------------------------------------------*/
-#ifdef ICACHE
+#if ICACHE
   SCB_EnableICache();
 #endif
   /* Enable D-Cache---------------------------------------------------------*/
-#ifdef DCACHE
+#if DCACHE
   SCB_EnableDCache();
 #endif
   /* MCU Configuration--------------------------------------------------------*/
