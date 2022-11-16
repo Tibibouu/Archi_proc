@@ -36,4 +36,13 @@ void mySort()
 	}
 	qsort(&myArray, sizeof(myArray), sizeof(uint32_t), cmpfunc);
 
+	tickStart = HAL_GetTick();
+
+	qsort(&myArray, ARRAY_SIZE, sizeof(uint32_t), cmpfunc);
+
+	tickStop = HAL_GetTick();
+	executionTime = tickStop - tickStart;
+
+	snprintf(executionTimeString, 10000, "tps : %d ms", executionTime);
+	BSP_LCD_DisplayStringAtLine(3, (uint8_t *) executionTimeString);
 }

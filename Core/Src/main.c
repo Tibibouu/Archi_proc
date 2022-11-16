@@ -71,11 +71,13 @@ int main(void)
   MPU_Config();
 
   /* Enable I-Cache---------------------------------------------------------*/
+#ifdef ICACHE
   SCB_EnableICache();
-
+#endif
   /* Enable D-Cache---------------------------------------------------------*/
+#ifdef DCACHE
   SCB_EnableDCache();
-
+#endif
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */

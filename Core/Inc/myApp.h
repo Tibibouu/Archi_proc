@@ -8,6 +8,9 @@
 #ifndef INC_MYAPP_H_
 #define INC_MYAPP_H_
 
+#define ICACHE
+#define DCACHE
+
 void myHelloWorld();
 
 
