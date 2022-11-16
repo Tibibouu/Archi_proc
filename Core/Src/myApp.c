@@ -31,18 +31,21 @@ int cmpfunc(const void * a, const void *b)
 void mySort()
 {
 	uint32_t tickStart = 0, tickStop = 0, executionTime = 0;
-
-	tickStart = HAL_GetTick();
+	char executionTimeString[30];
 
 	uint32_t myArray[ARRAY_SIZE];
 	for(uint32_t i = 0; i < ARRAY_SIZE; i++)
 	{
 		myArray[i] = ARRAY_SIZE - i;
 	}
+
+	tickStart = HAL_GetTick();
+
 	qsort(&myArray, ARRAY_SIZE, sizeof(uint32_t), cmpfunc);
 
 	tickStop = HAL_GetTick();
 	executionTime = tickStop - tickStart;
 
-	//BSP_LCD_DisplayStringAtLine(3, (uint8_t *) "Temps d'execution : %d", executionTime);
+	snprintf(executionTimeString, 10000, "tps : %d ms", executionTime);
+	BSP_LCD_DisplayStringAtLine(3, (uint8_t *) executionTimeString);
 }
