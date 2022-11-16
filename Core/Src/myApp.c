@@ -8,6 +8,9 @@
 #include "stm32f723e_discovery_lcd.h"
 #include "stdlib.h"
 
+#include "myApp.h"
+
+#define INTERNAL_BUFFER_START_ADDRESS 0x60000000
 #define ARRAY_SIZE 30000
 
 void myHelloWorld()
@@ -29,19 +32,39 @@ uint32_t cmpfunc(const void * a, const void *b)
 
 void mySort()
 {
+	uint32_t tickStart = 0, tickStop = 0, executionTime = 0;
+	char executionTimeString[30];
+
+	uint32_t *uwInternalBuffer = NULL;
+
+#if !SET_IN_EXTERNAL_MEM
 	uint32_t myArray[ARRAY_SIZE];
+	uwInternalBuffer = (uint32_t *)myArray;
+#else
+	uwInternalBuffer = (uint32_t *)INTERNAL_BUFFER_START_ADDRESS;
+#endif
+
 	for(uint32_t i = 0; i < ARRAY_SIZE; i++)
 	{
-		myArray[i] = ARRAY_SIZE - i;
+		uwInternalBuffer[i] = ARRAY_SIZE - i;
 	}
 	qsort(&myArray, sizeof(myArray), sizeof(uint32_t), cmpfunc);
 
 	tickStart = HAL_GetTick();
-
-	qsort(&myArray, ARRAY_SIZE, sizeof(uint32_t), cmpfunc);
-
+	qsort(uwInternalBuffer, ARRAY_SIZE, sizeof(uint32_t), cmpfunc);
 	tickStop = HAL_GetTick();
 	executionTime = tickStop - tickStart;
+	//Internal Mem :
+	//Time with double cache : 19ms
+	//Time with instruction cache : 34ms
+	//Time with data cache : 76ms
+	//Time without cache : 77ms
+
+	//External Mem:
+	//Time with double cache : 415ms
+	//Time with instruction cache : 1194ms
+	//Time with data cache : 427ms
+	//Time without cache : 1228ms
 
 	snprintf(executionTimeString, 10000, "tps : %d ms", executionTime);
 	BSP_LCD_DisplayStringAtLine(3, (uint8_t *) executionTimeString);

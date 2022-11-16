@@ -8,8 +8,9 @@
 #ifndef INC_MYAPP_H_
 #define INC_MYAPP_H_
 
-#define ICACHE
-#define DCACHE
+#define ICACHE 0
+#define DCACHE 0
+#define SET_IN_EXTERNAL_MEM 1
 
 void myHelloWorld();
 
