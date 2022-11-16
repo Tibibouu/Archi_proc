@@ -5,6 +5,7 @@
  *      Author: clego
  */
 
+#include "stm32f7xx_hal.h"
 #include "stm32f723e_discovery_lcd.h"
 #include "stdlib.h"
 
@@ -25,9 +26,9 @@ void myHelloWorld()
 	BSP_LCD_DisplayStringAtLine(2, (uint8_t *) "ZEBI");
 }
 
-uint32_t cmpfunc(const void * a, const void *b)
+int cmpfunc(const void * a, const void *b)
 {
-	return (*(uint32_t *)a - *(uint32_t*)b);
+	return (int)(*(uint32_t *)a - *(uint32_t*)b);
 }
 
 void mySort()
@@ -35,9 +36,6 @@ void mySort()
 	uint32_t tickStart = 0, tickStop = 0, executionTime = 0;
 	char executionTimeString[30];
 
-	uint32_t *uwInternalBuffer = NULL;
-
-#if !SET_IN_EXTERNAL_MEM
 	uint32_t myArray[ARRAY_SIZE];
 	uwInternalBuffer = (uint32_t *)myArray;
 #else
@@ -48,7 +46,6 @@ void mySort()
 	{
 		uwInternalBuffer[i] = ARRAY_SIZE - i;
 	}
-	qsort(&myArray, sizeof(myArray), sizeof(uint32_t), cmpfunc);
 
 	tickStart = HAL_GetTick();
 	qsort(uwInternalBuffer, ARRAY_SIZE, sizeof(uint32_t), cmpfunc);

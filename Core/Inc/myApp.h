@@ -13,6 +13,7 @@
 #define SET_IN_EXTERNAL_MEM 1
 
 void myHelloWorld();
+void mySort();
 
 
 #endif /* INC_MYAPP_H_ */
