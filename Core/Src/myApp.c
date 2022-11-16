@@ -23,9 +23,9 @@ void myHelloWorld()
 	BSP_LCD_DisplayStringAtLine(2, (uint8_t *) "ZEBI");
 }
 
-uint32_t cmpfunc(const void * a, const void *b)
+int cmpfunc(const void * a, const void *b)
 {
-	return (*(uint32_t *)a - *(uint32_t*)b);
+	return (int)(*(uint32_t *)a - *(uint32_t*)b);
 }
 
 void mySort()
@@ -39,10 +39,10 @@ void mySort()
 	{
 		myArray[i] = ARRAY_SIZE - i;
 	}
-	qsort(&myArray, sizeof(myArray), sizeof(uint32_t), cmpfunc);
+	qsort(&myArray, ARRAY_SIZE, sizeof(uint32_t), cmpfunc);
 
 	tickStop = HAL_GetTick();
 	executionTime = tickStop - tickStart;
 
-	BSP_LCD_DisplayStringAtLine(3, (uint8_t *) "Temps d'execution : %d", executionTime);
+	//BSP_LCD_DisplayStringAtLine(3, (uint8_t *) "Temps d'execution : %d", executionTime);
 }

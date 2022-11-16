@@ -9,6 +9,7 @@
 #define INC_MYAPP_H_
 
 void myHelloWorld();
+void mySort();
 
 
 #endif /* INC_MYAPP_H_ */
