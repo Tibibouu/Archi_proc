@@ -5,6 +5,7 @@
  *      Author: clego
  */
 
+#include "stm32f7xx_hal.h"
 #include "stm32f723e_discovery_lcd.h"
 #include "stdlib.h"
 
@@ -29,6 +30,10 @@ uint32_t cmpfunc(const void * a, const void *b)
 
 void mySort()
 {
+	uint32_t tickStart = 0, tickStop = 0, executionTime = 0;
+
+	tickStart = HAL_GetTick();
+
 	uint32_t myArray[ARRAY_SIZE];
 	for(uint32_t i = 0; i < ARRAY_SIZE; i++)
 	{
@@ -36,4 +41,8 @@ void mySort()
 	}
 	qsort(&myArray, sizeof(myArray), sizeof(uint32_t), cmpfunc);
 
+	tickStop = HAL_GetTick();
+	executionTime = tickStop - tickStart;
+
+	BSP_LCD_DisplayStringAtLine(3, (uint8_t *) "Temps d'execution : %d", executionTime);
 }
