@@ -1,0 +1,202 @@
+@startuml diagrammeDeClasse
+
+skinparam classAttributeIconSize 0
+
+package "Nirvanapp" 
+{
+
+    class Carto <<protected>> <<entity>>
+    {
+        -idCarto:IdCarto
+        -name:String
+        -rawCarto:Bitmap
+        -treatedCarto:Bitmap
+    }
+
+    class Draw <<protected>> <<entity>>
+    {
+        -path:Path
+        -myLineSize:int 
+        -myColor:Color
+    }
+
+    class GUI <<active>> <<boundary>>
+    {
+        -myIdScreen:IdScreen
+        -myIdCarto:IdCarto
+        -myIdButton:IdButton
+        -myErrorCode:ErrorCode
+        -myHistory:Carto[]
+        -myCarto:Carto
+        -scanFinished:int
+        -displayScreen(myIdScreen:IdScreen):void
+        -displayHistory(myHistory:Carto[]):void
+        -displayCartography(myCarto:Carto):void
+        -greyCartographySelected(myIdCarto:IdCarto):void
+        -enableButton(myIdButton:IdButton):void
+        -disableButton(myIdButton:IdButton):void
+        +validate():void
+        +back():void
+        +quit():void
+        +yes():void
+        +no():void
+        +setErrorCode(myErrorCode:ErrorCode):void
+        +selectCartography(myIdCarto:IdCarto):void
+        +selectMarker(marker:Marker):void
+        +touchsScreen():void
+        +swipeScreen():void
+        +leaveScreen():void
+        +inputName(name:String):void
+        +ask4Scan(marker:Marker):void
+        +ask4Modify():void
+        +ask4History():void
+        +ask4Save():void
+        +ask4DrawDoor():void
+        +ask4DrawObstacle():void
+        +ask4Erase():void
+        +ask4Connection():void
+        +ack4Scan():void
+        +ackCarto():void
+        +ackSave():void
+        +ack4SaveCarto():void
+    }
+
+    class Picasso
+    {
+        -paths:Draw[]
+        +draw(path:Path, lineSize:int, color:Color):Bitmap
+        +undo():void
+        +setLineSize(size:int):void 
+        +getLineSize():int
+        +setColor(color:Color):void 
+        +getColor():Color
+        +touchStart(x:float,y:float):void
+        +touchMove(x:float,y:float):void
+        +touchEnd(x:float,y:float):void
+        +createPath():void
+        +updatePath():void
+    }
+
+    class "CartoManager" as CM <<entity>>
+    {
+        -myHistory:Carto[]
+        -idCurrentCarto:IdCarto
+        -name:String
+        -deleteOldestCarto():void
+        +ask4SetCarto(idCurrentCarto:IdCarto):void
+        +ask4SaveCarto(currentCarto:Carto, name:String):void
+        +getMyIdCarto():int
+        +setMyIdCarto(idCurrentCarto:IdCarto):void
+        +getCarto(idCurrentCarto:IdCarto):Carto
+        +setCarto(name:String, rawCarto:Bitmap, treatedCarto:Bitmap):void
+        +getIdCurrentCarto():int
+        +setName(idCurrentCarto:IdCarto, name:String):void
+        +getName(idCurrentCarto:IdCarto):String
+        +setTreatedCarto(idCurrentCarto:IdCarto, treatedCarto:Bitmap):void
+        +getTreatedCarto(idCurrentCarto:IdCarto):Bitmap
+        +verifyName(name:String):e_verfiyName
+        +getHistory():Carto[]
+        +getCartoNumberInFolder():int
+        +setCurrentCarto(idCurrentCarto:IdCarto):void
+        +getCurrentCarto():Carto
+    }
+
+    class "NetworkA" as NA <<active>>
+    {
+        -myConnectionState : ConnectionState
+        +getConnectionState():ConnectionState
+    }
+
+    class "PopUp" as PU
+    {
+        -myIdPopUp:IdPopUp
+        +showPopUp(myIdPopUp:IdPopUp):void
+    }
+
+    CM "1" -> "0..10" Carto
+    Picasso"1" -l-> "   0..*"Draw
+    NA "1" <-d-> "1" GUI
+    Picasso "1" <- "1" GUI
+    GUI "1" -r-> "1" CM
+    PU "1"<-"1" GUI
+
+    PU -[hidden]r-> NA
+}
+
+package "ACDSoft" 
+{  
+
+    class "UI" as UI <<boundary>> <<active>>
+    {
+        -showPopUp():void
+        -setColor(color:Color):void
+        -quit():void
+        -yes():void
+        -no():void
+    }
+
+
+    class "LiDAR" as LiDAR <<boundary>>
+    {
+        +startScan():void
+        +getScan(rawData:RawData):void
+    }
+
+    class "Geographer" as Geographer <<active>>
+    {
+        -myRawData:RawData 
+        -myRawScan:RawScan
+        -myRawScanMerged:RawScanMerged
+        -myCarto:Carto
+        -myMarker:Marker
+        +ask4Scan(marker:Marker):void
+        +endScan():void
+        +ackCarto():void
+        +setCarto(carto:Carto):void
+        +ackSave():void
+    }
+
+    class "Folder" as Folder <<entity>>
+    {
+        -myCarto:carto
+        -getNumberOfCartosSaved():int
+        -deleteOldestCarto():void
+        -getNewId():int
+        -buildFilename(carto:Carto):String
+        +createNewCarto():Carto
+        +saveRawCarto(carto:Carto):void
+        +saveTreatedCarto(carto:Carto):void
+        +convert2Bitmap(rawscan:RawScan):RawCarto
+    }
+
+    class "Converter" as Converter
+    {
+        +convert2RawScan(rawScan:RawScan, rawData:RawData):void
+        +resetRawScan(rawScan:RawScan):void
+    }
+
+    class "Merger" as Merger 
+    {
+        +merge(inout rawScanMerged:RawScanMerged, rawScan:RawScan, marker:Marker):void
+    }
+
+
+    class "NetworkC" as NC 
+    {
+        -myConnectionState: ConnectionState
+        +setConnectionState(myConnectionState: ConnectionState):
+        +getConnectionState(): ConnectionState
+    }
+}
+
+Geographer "1" <-d-> "1" LiDAR
+Geographer "1" <-u-> "1" CM
+Geographer "1" <-d-> "1" Folder
+Geographer "1" -d-> "1" Converter
+GUI "1" <-> "1" Geographer
+NC "1" <-l- "1" UI
+Geographer "1" -> "1" Merger
+
+Folder <-d[hidden]-> UI : \n \n \n
+
+@enduml
