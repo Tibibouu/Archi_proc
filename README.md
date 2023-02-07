@@ -5,7 +5,12 @@
 ```plantuml
 @startuml test
 
-!include diagrammeDeClasse.puml
+class ClassName {
+  +field1: int
+  +field2: String
+  -method1()
+  +method2()
+}
 
 @enduml
 ```
