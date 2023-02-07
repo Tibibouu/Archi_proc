@@ -1,6 +1,7 @@
 @startuml diagrammeDeClasse
 
 skinparam classAttributeIconSize 0
+skinparam backgroundcolor transparent
 
 package "Nirvanapp" 
 {
